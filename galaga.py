@@ -259,18 +259,11 @@ class Player(pygame.sprite.Sprite):
         if (keys[pygame.K_DOWN] or keys[pygame.K_s]) and self.rect.bottom < VIRTUAL_HEIGHT:
             self.rect.y += self.movement_speed
 
+        # 直接将玩家位置设置为鼠标位置，而不是渐进式移动
         mouse_x = mouse_pos[0] / scale_factor_x
         mouse_y = mouse_pos[1] / scale_factor_y
-        target_x = max(0, min(VIRTUAL_WIDTH, mouse_x))
-        target_y = max(0, min(VIRTUAL_HEIGHT, mouse_y))
-        dx = target_x - self.rect.centerx
-        dy = target_y - self.rect.centery
-        distance = math.sqrt(dx * dx + dy * dy)
-        if distance > self.movement_speed:
-            dx = (dx / distance) * self.movement_speed
-            dy = (dy / distance) * self.movement_speed
-        self.rect.x += dx
-        self.rect.y += dy
+        self.rect.centerx = max(0, min(VIRTUAL_WIDTH, mouse_x))
+        self.rect.centery = max(0, min(VIRTUAL_HEIGHT, mouse_y))
 
     def shoot(self):
         if self.shoot_cooldown <= 0:
