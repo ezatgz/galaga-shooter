@@ -138,3 +138,6 @@ Thumbs.db
 # IDE specific files
 .vscode/
 .idea/
+
+# Local files
+localassetslib

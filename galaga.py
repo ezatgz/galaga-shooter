@@ -48,44 +48,46 @@ CYAN = (0, 255, 255)
 GREEN = (0, 255, 0)
 
 # Load sound effects
-SHOOT_SOUND = pygame.mixer.Sound("shoot.wav")
-EXPLOSION_SOUND = pygame.mixer.Sound("explosion.wav")
-LOST_LIFE_SOUND = pygame.mixer.Sound("lost_life.wav")
-GAME_OVER_SOUND = pygame.mixer.Sound("game_over.wav")
-LEVEL_CLEAR_SOUND = pygame.mixer.Sound("level_clear.wav")
-BONUS_SOUND = pygame.mixer.Sound("bonus.wav")
-POWER_UP_COLLECT_SOUND = pygame.mixer.Sound("power_up.wav")
-POWER_UP_ACTIVATE_SOUND = pygame.mixer.Sound("power_activate.wav")
-POWER_UP_ZERO_SOUND = pygame.mixer.Sound("power_zero.wav")
-CLICK_SOUND = pygame.mixer.Sound("click.wav")
+SHOOT_SOUND = pygame.mixer.Sound("assets/sounds/shoot.wav")
+EXPLOSION_SOUND = pygame.mixer.Sound("assets/sounds/explosion.wav")
+LOST_LIFE_SOUND = pygame.mixer.Sound("assets/sounds/lost_life.wav")
+GAME_OVER_SOUND = pygame.mixer.Sound("assets/sounds/game_over.wav")
+LEVEL_CLEAR_SOUND = pygame.mixer.Sound("assets/sounds/level_clear.wav")
+BONUS_SOUND = pygame.mixer.Sound("assets/sounds/bonus.wav")
+POWER_UP_COLLECT_SOUND = pygame.mixer.Sound("assets/sounds/power_up.wav")
+POWER_UP_ACTIVATE_SOUND = pygame.mixer.Sound("assets/sounds/power_activate.wav")
+POWER_UP_ZERO_SOUND = pygame.mixer.Sound("assets/sounds/power_zero.wav")
+CLICK_SOUND = pygame.mixer.Sound("assets/sounds/click.wav")
 
-pygame.mixer.music.load("bgm.mp3")
+pygame.mixer.music.load("assets/sounds/bgm.mp3")
 
 LEVEL_CLEAR_DURATION = LEVEL_CLEAR_SOUND.get_length()
 MINIMUM_SOUND_DURATION = LEVEL_CLEAR_DURATION + 0.1
 print(f"LEVEL_CLEAR_SOUND duration: {LEVEL_CLEAR_DURATION} seconds, Minimum duration set to: {MINIMUM_SOUND_DURATION} seconds")
 
 # Load sprite images
-PLAYER_IMAGE = pygame.image.load("player.png").convert_alpha()
-ENEMY_IMAGE = pygame.image.load("enemy.png").convert_alpha()
-ENEMY_FAST_IMAGE = pygame.image.load("enemy_fast.png").convert_alpha()
+PLAYER_IMAGE = pygame.image.load("assets/images/sprites/player.png").convert_alpha()
+ENEMY_IMAGE = pygame.image.load("assets/images/sprites/enemy.png").convert_alpha()
+ENEMY_FAST_IMAGE = pygame.image.load("assets/images/sprites/enemy_fast.png").convert_alpha()
 ENEMY_BASE_SIZE = ENEMY_IMAGE.get_size()
 ENEMY_FAST_IMAGE = pygame.transform.scale(ENEMY_FAST_IMAGE, ENEMY_BASE_SIZE).convert_alpha()
-PLAYER_BULLET_IMAGE = pygame.image.load("player_bullet.png").convert_alpha()
-ENEMY_BULLET_IMAGE = pygame.image.load("enemy_bullet.png").convert_alpha()
-BOSS_IMAGE = pygame.image.load("boss.png").convert_alpha()
-EXPLOSION_SHEET = pygame.image.load("explosion.png").convert_alpha()
-BACKGROUND_IMAGE = pygame.image.load("background.png").convert()
+PLAYER_BULLET_IMAGE = pygame.image.load("assets/images/sprites/player_bullet.png").convert_alpha()
+ENEMY_BULLET_IMAGE = pygame.image.load("assets/images/sprites/enemy_bullet.png").convert_alpha()
+BOSS_IMAGE = pygame.image.load("assets/images/sprites/boss.png").convert_alpha()
+EXPLOSION_SHEET = pygame.image.load("assets/images/sprites/explosion.png").convert_alpha()
+BACKGROUND_IMAGE = pygame.image.load("assets/images/backgrounds/background.png").convert()
 BACKGROUND_IMAGE = pygame.transform.scale(BACKGROUND_IMAGE, (VIRTUAL_WIDTH, VIRTUAL_HEIGHT))
-HEART_FULL = pygame.image.load("heart_full.png").convert_alpha()
-HEART_EMPTY = pygame.image.load("heart_empty.png").convert_alpha()
-POWER_UP_LIFE_IMAGE = pygame.image.load("power_up_life.png").convert_alpha()
-POWER_UP_SHIELD_IMAGE = pygame.image.load("power_up_shield.png").convert_alpha()
-POWER_UP_SPREAD_IMAGE = pygame.image.load("power_up_spread.png").convert_alpha()
-SPACE_BG_IMAGE = pygame.image.load("background.png").convert()
+HEART_FULL = pygame.image.load("assets/images/ui/heart_full.png").convert_alpha()
+HEART_EMPTY = pygame.image.load("assets/images/ui/heart_empty.png").convert_alpha()
+POWER_UP_LIFE_IMAGE = pygame.image.load("assets/images/sprites/power_up_life.png").convert_alpha()
+POWER_UP_SHIELD_IMAGE = pygame.image.load("assets/images/sprites/power_up_shield.png").convert_alpha()
+POWER_UP_SPREAD_IMAGE = pygame.image.load("assets/images/sprites/power_up_spread.png").convert_alpha()
+SPACE_BG_IMAGE = pygame.image.load("assets/images/backgrounds/background.png").convert()
 SPACE_BG_IMAGE = pygame.transform.scale(SPACE_BG_IMAGE, (VIRTUAL_WIDTH, VIRTUAL_HEIGHT * 2))
 
-PIXEL_FONT = pygame.font.Font("press-start-2p.ttf", 16)
+# Font initialization
+PIXEL_FONT = pygame.font.Font("assets/fonts/menu.ttf", 16)
+FONT_PATH = "assets/fonts/menu.ttf"
 
 # Background scrolling variables
 scroll_speed = 2
@@ -132,8 +134,8 @@ def update_scaling():
 update_scaling()
 
 # --- Config and High Score File Management ---
-CONFIG_FILE = "config.json"
-HIGHSCORE_FILE = "highscores.json"
+CONFIG_FILE = "assets/data/config.json"
+HIGHSCORE_FILE = "assets/data/highscores.json"
 DEFAULT_CONFIG = {
     "movement_speed": 2,
     "shooting_speed": 2,
@@ -177,6 +179,9 @@ def save_highscores(highscores):
 
 config = load_config()
 highscores = load_highscores()
+
+# Initialize the font after loading config
+PIXEL_FONT = pygame.font.Font(FONT_PATH, 16)
 
 # --- PowerUp Class ---
 class PowerUp(pygame.sprite.Sprite):
@@ -349,7 +354,7 @@ class Button:
         self.inactive_color = inactive_color
         self.active_color = active_color
         self.selected_color = selected_color or GREEN
-        self.font = PIXEL_FONT
+        self.font = pygame.font.Font("assets/fonts/menu.ttf", 16)
         self.hovered = False
         self.selected = False
         self.scale_factor = 1.0  # For hover scaling
@@ -365,7 +370,7 @@ class Button:
                                 scaled_width, scaled_height)
         pygame.draw.rect(surface, color, scaled_rect)
         pygame.draw.rect(surface, WHITE, scaled_rect, 4)
-        scaled_font = pygame.font.Font("press-start-2p.ttf", int(16 * scale_factor_y))
+        scaled_font = pygame.font.Font("assets/fonts/menu.ttf", int(16 * scale_factor_y))
         text_surface = scaled_font.render(self.text, True, YELLOW)
         text_rect = text_surface.get_rect(center=scaled_rect.center)
         surface.blit(text_surface, text_rect)
@@ -380,14 +385,14 @@ class Checkbox:
         self.text = text
         self.rect = pygame.Rect(x, y, 16, 16)
         self.checked = True
-        self.font = PIXEL_FONT
+        self.font = pygame.font.Font("assets/fonts/menu.ttf", 16)
 
     def draw(self, surface):
         pygame.draw.rect(surface, WHITE, self.rect, 2)
         if self.checked:
             pygame.draw.line(surface, YELLOW, (self.rect.left + 4, self.rect.top + 4), (self.rect.right - 4, self.rect.bottom - 4), 2)
             pygame.draw.line(surface, YELLOW, (self.rect.right - 4, self.rect.top + 4), (self.rect.left + 4, self.rect.bottom - 4), 2)
-        scaled_font = pygame.font.Font("press-start-2p.ttf", int(16 * scale_factor_y))
+        scaled_font = pygame.font.Font("assets/fonts/menu.ttf", int(16 * scale_factor_y))
         text_surface = scaled_font.render(self.text, True, YELLOW)
         surface.blit(text_surface, (self.rect.right + 8, self.rect.top - 2))
 
@@ -408,14 +413,14 @@ class CyclingButton:
         self.options = options
         self.current_index = self.options.index(config[config_key])
         self.config_key = config_key
-        self.font = PIXEL_FONT
+        self.font = pygame.font.Font("assets/fonts/menu.ttf", 16)
         self.hovered = False
 
     def draw(self, surface):
         color = self.active_color if self.hovered else self.inactive_color
         pygame.draw.rect(surface, color, self.rect)
         pygame.draw.rect(surface, WHITE, self.rect, 4)
-        scaled_font = pygame.font.Font("press-start-2p.ttf", int(16 * scale_factor_y))
+        scaled_font = pygame.font.Font(FONT_PATH, int(16 * scale_factor_y))
         display_text = f"{self.text}: {'Normal' if self.options[self.current_index] == 2 else 'Fast'}"
         text_surface = scaled_font.render(display_text, True, YELLOW)
         text_rect = text_surface.get_rect(center=self.rect.center)
@@ -722,7 +727,7 @@ class Level:
 class Score:
     def __init__(self, player):
         self.score = 0
-        self.font = PIXEL_FONT
+        self.font = pygame.font.Font("assets/fonts/menu.ttf", 16)
         self.player = player
         self.bonus_text = ""
         self.bonus_timer = 0
@@ -742,7 +747,7 @@ class Score:
         self.difficulty_timer = 180
 
     def draw(self, surface):
-        scaled_font = pygame.font.Font("press-start-2p.ttf", int(16 * scale_factor_y))
+        scaled_font = pygame.font.Font(FONT_PATH, int(16 * scale_factor_y))
         score_text = scaled_font.render(f"SCORE: {self.score}", True, YELLOW)
         surface.blit(score_text, (20, 20))
 
@@ -1000,8 +1005,10 @@ while running:
             virtual_screen.blit(SPACE_BG_IMAGE, (0, bg_scroll_y), (0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT))
 
         # Animated Title: Fade-in effect
-        scaled_font = pygame.font.Font("press-start-2p.ttf", int(24 * scale_factor_y))
+        scaled_font = pygame.font.Font("assets/fonts/menu.ttf", int(24 * scale_factor_y))
         title_text = scaled_font.render("STARSHIP COMMANDER", True, YELLOW)
+        title_surface = pygame.Surface(title_text.get_size(), pygame.SRCALPHA)
+        title_surface.blit(title_text, (0, 0))
         title_surface = pygame.Surface(title_text.get_size(), pygame.SRCALPHA)
         title_surface.blit(title_text, (0, 0))
         title_alpha = min(255, title_alpha + title_fade_speed)
@@ -1022,7 +1029,7 @@ while running:
         if welcome_index > 0:
             welcome_visible = True
         if welcome_visible:
-            welcome_font = pygame.font.Font("press-start-2p.ttf", int(12 * scale_factor_y))
+            welcome_font = pygame.font.Font("assets/fonts/menu.ttf", int(12 * scale_factor_y))
             welcome_surface = welcome_font.render(welcome_text[:welcome_index], True, CYAN)
             welcome_box = pygame.Surface((welcome_surface.get_width() + 20, welcome_surface.get_height() + 10), pygame.SRCALPHA)
             pygame.draw.rect(welcome_box, GRAY, welcome_box.get_rect(), border_radius=5)
@@ -1035,7 +1042,7 @@ while running:
 
         # Display high scores
         highscore_y = START_Y + TOTAL_HEIGHT + 20
-        scaled_font = pygame.font.Font("press-start-2p.ttf", int(16 * scale_factor_y))
+        scaled_font = pygame.font.Font(FONT_PATH, int(16 * scale_factor_y))
         text = "HIGH SCORE"
         text_width, text_height = scaled_font.size(text)  # Returns (width, height)
         virtual_screen.blit(scaled_font.render(text, True, YELLOW), (VIRTUAL_WIDTH // 2 - text_width // 2, highscore_y - 20))
@@ -1140,7 +1147,7 @@ while running:
 
     elif game_state == PAUSED:
         virtual_screen.fill(BLACK)
-        scaled_font = pygame.font.Font("press-start-2p.ttf", int(16 * scale_factor_y))
+        scaled_font = pygame.font.Font(FONT_PATH, int(16 * scale_factor_y))
         paused_text = scaled_font.render("PAUSED", True, YELLOW)
         paused_y = PAUSE_START_Y - 40 - paused_text.get_height()
         virtual_screen.blit(paused_text, (VIRTUAL_WIDTH // 2 - paused_text.get_width() // 2, paused_y))
@@ -1163,7 +1170,7 @@ while running:
 
     elif game_state == LEVEL_UP:
         virtual_screen.fill(BLACK)
-        scaled_font = pygame.font.Font("press-start-2p.ttf", int(16 * scale_factor_y))
+        scaled_font = pygame.font.Font(FONT_PATH, int(16 * scale_factor_y))
         level_up_text = scaled_font.render(f"LEVEL UP! LEVEL {level.level}", True, YELLOW)
         virtual_screen.blit(level_up_text, (VIRTUAL_WIDTH // 2 - level_up_text.get_width() // 2, VIRTUAL_HEIGHT // 2 - 24))
 
@@ -1200,7 +1207,7 @@ while running:
 
     elif game_state == NAME_INPUT:
         virtual_screen.fill(BLACK)
-        scaled_font = pygame.font.Font("press-start-2p.ttf", int(16 * scale_factor_y))
+        scaled_font = pygame.font.Font(FONT_PATH, int(16 * scale_factor_y))
         game_over_text = scaled_font.render("GAME OVER", True, YELLOW)
         score_text = scaled_font.render(f"SCORE: {score.score}", True, YELLOW)
         name_prompt = scaled_font.render("Enter Name:", True, YELLOW)
@@ -1228,7 +1235,7 @@ while running:
 
     elif game_state == GAME_OVER:
         virtual_screen.fill(BLACK)
-        scaled_font = pygame.font.Font("press-start-2p.ttf", int(16 * scale_factor_y))
+        scaled_font = pygame.font.Font(FONT_PATH, int(16 * scale_factor_y))
         game_over_text = scaled_font.render("GAME OVER", True, YELLOW)
         score_text = scaled_font.render(f"SCORE: {score.score}", True, YELLOW)
         virtual_screen.blit(game_over_text, (VIRTUAL_WIDTH // 2 - game_over_text.get_width() // 2, VIRTUAL_HEIGHT // 2 - 160))
@@ -1251,7 +1258,7 @@ while running:
 
     # Render the FPS counter
     # fps = str(int(clock.get_fps()))
-    # scaled_font = pygame.font.Font("press-start-2p.ttf", int(16 * scale_factor_y))
+    # scaled_font = pygame.font.Font("assets/fonts/menu.ttf", int(16 * scale_factor_y))
     # fps_text = scaled_font.render(f"FPS: {fps}", True, YELLOW)
     # virtual_screen.blit(fps_text, (20, 100))
 
