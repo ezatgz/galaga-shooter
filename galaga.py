@@ -10,8 +10,8 @@ pygame.mixer.init(frequency=44100, size=-16, channels=2, buffer=4096)
 pygame.mixer.set_num_channels(16)
 
 # Virtual resolution (16:9)
-VIRTUAL_WIDTH = 1280
-VIRTUAL_HEIGHT = 720
+VIRTUAL_WIDTH = 1920
+VIRTUAL_HEIGHT = 1080
 ASPECT_RATIO = VIRTUAL_WIDTH / VIRTUAL_HEIGHT
 
 # Detect native resolution
@@ -63,7 +63,7 @@ pygame.mixer.music.load("assets/sounds/bgm.mp3")
 
 LEVEL_CLEAR_DURATION = LEVEL_CLEAR_SOUND.get_length()
 MINIMUM_SOUND_DURATION = LEVEL_CLEAR_DURATION + 0.1
-print(f"LEVEL_CLEAR_SOUND duration: {LEVEL_CLEAR_DURATION} seconds, Minimum duration set to: {MINIMUM_SOUND_DURATION} seconds")
+# print(f"LEVEL_CLEAR_SOUND duration: {LEVEL_CLEAR_DURATION} seconds, Minimum duration set to: {MINIMUM_SOUND_DURATION} seconds")
 
 # Load sprite images
 PLAYER_IMAGE = pygame.image.load("assets/images/sprites/player.png").convert_alpha()
@@ -129,7 +129,7 @@ def update_scaling():
         letterbox_x = 0
         letterbox_y = (WINDOW_HEIGHT - scaled_height) / 2
 
-    print(f"Window: {WINDOW_WIDTH}x{WINDOW_HEIGHT}, Scale factors: ({scale_factor_x}, {scale_factor_y}), Letterbox: ({letterbox_x}, {letterbox_y})")
+    # print(f"Window: {WINDOW_WIDTH}x{WINDOW_HEIGHT}, Scale factors: ({scale_factor_x}, {scale_factor_y}), Letterbox: ({letterbox_x}, {letterbox_y})")
 
 update_scaling()
 
@@ -518,7 +518,7 @@ class Enemy(pygame.sprite.Sprite):
             if random.random() < dive_chance:
                 self.is_diving = True
                 self.dive_timer = 0
-                print(f"Starting dive from {self.rect}")
+                # print(f"Starting dive from {self.rect}")
 
         if self.is_diving:
             self.dive_timer += 1
@@ -527,11 +527,11 @@ class Enemy(pygame.sprite.Sprite):
                 if self.rect.y >= self.dive_target_y:
                     self.rect.y = self.dive_target_y
                 self.rect.x = base_x + math.sin(self.dive_timer * 0.2) * 5
-                print(f"Diving: {self.rect}")
+                # print(f"Diving: {self.rect}")
             else:
                 self.is_diving = False
                 self.is_returning = True
-                print(f"Reached dive target, starting return: {self.rect}")
+                # print(f"Reached dive target, starting return: {self.rect}")
 
         if self.is_returning:
             target_x = base_x
@@ -539,12 +539,12 @@ class Enemy(pygame.sprite.Sprite):
             if self.rect.y > target_y:
                 self.rect.y -= self.return_speed
                 self.rect.x = target_x
-                print(f"Returning: {self.rect}, target=({target_x}, {target_y})")
+                # print(f"Returning: {self.rect}, target=({target_x}, {target_y})")
             if self.rect.y <= target_y + 2:
                 self.rect.x = target_x
                 self.rect.y = target_y
                 self.is_returning = False
-                print(f"Snapped to: {self.rect}")
+                # print(f"Snapped to: {self.rect}")
 
         self.shoot()
         self.bullets.update()
@@ -1175,7 +1175,7 @@ while running:
         virtual_screen.blit(level_up_text, (VIRTUAL_WIDTH // 2 - level_up_text.get_width() // 2, VIRTUAL_HEIGHT // 2 - 24))
 
         if level_up_channel is None:
-            print("Playing LEVEL_CLEAR_SOUND, pausing BGM")
+            # print("Playing LEVEL_CLEAR_SOUND, pausing BGM")
             bgm_position = pygame.mixer.music.get_pos() / 1000
             if play_bgm:
                 pygame.mixer.music.pause()
@@ -1196,13 +1196,13 @@ while running:
             sound_completion_delay = 0
 
         if (min_duration_reached or timeout_reached) and (sound_finished and sound_completion_delay >= 10):
-            print(f"Level up transition: Sound finished: {sound_finished}, Min duration: {min_duration_reached}, Timeout: {timeout_reached}, Delay: {sound_completion_delay}")
+            # print(f"Level up transition: Sound finished: {sound_finished}, Min duration: {min_duration_reached}, Timeout: {timeout_reached}, Delay: {sound_completion_delay}")
             level_up_channel = None
             level_up_timer = 0
             if play_bgm:
                 pygame.mixer.music.unpause()
             level.spawn_wave()
-            print(f"Transitioning to level {level.level}, wave {level.wave}")
+            # print(f"Transitioning to level {level.level}, wave {level.wave}")
             game_state = GAME_PLAYING
 
     elif game_state == NAME_INPUT:
