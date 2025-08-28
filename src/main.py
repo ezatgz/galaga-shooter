@@ -95,7 +95,10 @@ async def main():
     space_bg_image = pygame.transform.scale(space_bg_image, (VIRTUAL_WIDTH, VIRTUAL_HEIGHT * 2))
     player_image = pygame.image.load(ASSET_PATHS["player_image"]).convert_alpha()
     
-    start_button = Button("START", VIRTUAL_WIDTH // 2 - BUTTON_WIDTH // 2, START_Y, BUTTON_WIDTH, BUTTON_HEIGHT, GRAY, CYAN, scale_factor_y=scale_factor_y)
+    # 修改Start按钮的位置，为两个按钮居中做准备
+    start_button = Button("START", VIRTUAL_WIDTH // 2 - BUTTON_WIDTH - SPACING // 2, START_Y, BUTTON_WIDTH, BUTTON_HEIGHT, GRAY, CYAN, scale_factor_y=scale_factor_y)
+    # 添加Exit按钮
+    exit_button = Button("EXIT", VIRTUAL_WIDTH // 2 + SPACING // 2, START_Y, BUTTON_WIDTH, BUTTON_HEIGHT, GRAY, CYAN, scale_factor_y=scale_factor_y)
     bgm_checkbox = Checkbox("MUSIC", VIRTUAL_WIDTH // 2 - BUTTON_WIDTH // 2, START_Y + BUTTON_HEIGHT + SPACING, scale_factor_y)
     difficulty_y = START_Y + BUTTON_HEIGHT + CHECKBOX_HEIGHT + (2 * SPACING)
     difficulty_easy_button = Button("EASY", VIRTUAL_WIDTH // 2 - (DIFFICULTY_BUTTON_WIDTH * 3 + 2 * SPACING) // 2, difficulty_y, DIFFICULTY_BUTTON_WIDTH, DIFFICULTY_BUTTON_HEIGHT, GRAY, CYAN, GREEN, scale_factor_y)
@@ -217,6 +220,11 @@ async def main():
                         sound_effects["click"].play()
                         reset_game(play_bgm, difficulty_mode)
                         game_state[0] = GAME_PLAYING
+                    # 添加Exit按钮点击事件处理
+                    if exit_button.is_clicked(pos, scale_factor_x, scale_factor_y):
+                        sound_effects["click"].play()
+                        pygame.time.delay(300)  # 等待音效播放完成
+                        running = False
                     if bgm_checkbox.toggle(pos, scale_factor_x, scale_factor_y):
                         play_bgm = bgm_checkbox.checked
                         if not play_bgm:
@@ -350,6 +358,7 @@ async def main():
 
             mouse_pos = pygame.mouse.get_pos()
             start_button.hovered = start_button.is_clicked(mouse_pos, scale_factor_x, scale_factor_y)
+            exit_button.hovered = exit_button.is_clicked(mouse_pos, scale_factor_x, scale_factor_y)
             difficulty_easy_button.hovered = difficulty_easy_button.is_clicked(mouse_pos, scale_factor_x, scale_factor_y)
             difficulty_normal_button.hovered = difficulty_normal_button.is_clicked(mouse_pos, scale_factor_x, scale_factor_y)
             difficulty_hard_button.hovered = difficulty_hard_button.is_clicked(mouse_pos, scale_factor_x, scale_factor_y)
@@ -362,6 +371,7 @@ async def main():
             difficulty_hard_button.selected = (difficulty_mode == "Hard")
 
             start_button.draw(virtual_screen)
+            exit_button.draw(virtual_screen)
             bgm_checkbox.draw(virtual_screen)
             difficulty_easy_button.draw(virtual_screen)
             difficulty_normal_button.draw(virtual_screen)
