@@ -1257,10 +1257,10 @@ while running:
         gameover_quit_button.draw(virtual_screen)
 
     # Render the FPS counter
-    # fps = str(int(clock.get_fps()))
-    # scaled_font = pygame.font.Font("assets/fonts/menu.ttf", int(16 * scale_factor_y))
-    # fps_text = scaled_font.render(f"FPS: {fps}", True, YELLOW)
-    # virtual_screen.blit(fps_text, (20, 100))
+    fps = str(int(clock.get_fps()))
+    scaled_font = pygame.font.Font("assets/fonts/menu.ttf", int(16 * scale_factor_y))
+    fps_text = scaled_font.render(f"FPS: {fps}", True, YELLOW)
+    virtual_screen.blit(fps_text, (20, 100))
 
     # Final rendering
     screen.fill(BLACK)
