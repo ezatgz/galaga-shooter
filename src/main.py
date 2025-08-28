@@ -90,6 +90,11 @@ async def main():
     TOTAL_HEIGHT = (BUTTON_HEIGHT * 4) + CHECKBOX_HEIGHT + (DIFFICULTY_BUTTON_HEIGHT * 1) + (24 * scale_factor_y) + (SPACING * 5)
     START_Y = (VIRTUAL_HEIGHT - TOTAL_HEIGHT) // 2
 
+    # 预加载着陆页面使用的图像，避免在渲染时重复加载
+    space_bg_image = pygame.image.load(ASSET_PATHS["space_bg_image"]).convert()
+    space_bg_image = pygame.transform.scale(space_bg_image, (VIRTUAL_WIDTH, VIRTUAL_HEIGHT * 2))
+    player_image = pygame.image.load(ASSET_PATHS["player_image"]).convert_alpha()
+    
     start_button = Button("START", VIRTUAL_WIDTH // 2 - BUTTON_WIDTH // 2, START_Y, BUTTON_WIDTH, BUTTON_HEIGHT, GRAY, CYAN, scale_factor_y=scale_factor_y)
     bgm_checkbox = Checkbox("MUSIC", VIRTUAL_WIDTH // 2 - BUTTON_WIDTH // 2, START_Y + BUTTON_HEIGHT + SPACING, scale_factor_y)
     difficulty_y = START_Y + BUTTON_HEIGHT + CHECKBOX_HEIGHT + (2 * SPACING)
@@ -297,8 +302,7 @@ async def main():
             bg_scroll_y += 1
             if bg_scroll_y >= VIRTUAL_HEIGHT:
                 bg_scroll_y = 0
-            space_bg_image = pygame.image.load(ASSET_PATHS["space_bg_image"]).convert()
-            space_bg_image = pygame.transform.scale(space_bg_image, (VIRTUAL_WIDTH, VIRTUAL_HEIGHT * 2))
+            # 使用预加载的图像，避免重复加载
             virtual_screen.blit(space_bg_image, (0, bg_scroll_y - VIRTUAL_HEIGHT), (0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT))
             if bg_scroll_y < VIRTUAL_HEIGHT:
                 virtual_screen.blit(space_bg_image, (0, bg_scroll_y), (0, 0, VIRTUAL_WIDTH, VIRTUAL_HEIGHT))
@@ -313,7 +317,8 @@ async def main():
             virtual_screen.blit(title_surface, (VIRTUAL_WIDTH // 2 - title_text.get_width() // 2, title_y))
 
             ship_angle += 1
-            rotated_ship = pygame.transform.rotate(pygame.transform.scale(pygame.image.load(ASSET_PATHS["player_image"]).convert_alpha(), (int(64 * scale_factor_x), int(64 * scale_factor_y))), ship_angle)
+            # 使用预加载的图像
+            rotated_ship = pygame.transform.rotate(pygame.transform.scale(player_image, (int(64 * scale_factor_x), int(64 * scale_factor_y))), ship_angle)
             ship_rect = rotated_ship.get_rect(center=(ship_x, ship_y))
             virtual_screen.blit(rotated_ship, ship_rect.topleft)
 
