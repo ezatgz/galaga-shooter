@@ -114,7 +114,7 @@ async def main():
     PAUSE_TOTAL_HEIGHT = (BUTTON_HEIGHT * 4) + CHECKBOX_HEIGHT + (SPACING * 4)
     PAUSE_START_Y = (VIRTUAL_HEIGHT - PAUSE_TOTAL_HEIGHT) // 2
     pause_resume_button = Button("RESUME", VIRTUAL_WIDTH // 2 - BUTTON_WIDTH // 2, PAUSE_START_Y, BUTTON_WIDTH, BUTTON_HEIGHT, GRAY, CYAN, scale_factor_y=scale_factor_y)
-    pause_quit_button = Button("QUIT", VIRTUAL_WIDTH // 2 - BUTTON_WIDTH // 2, PAUSE_START_Y + BUTTON_HEIGHT + SPACING, BUTTON_WIDTH, BUTTON_HEIGHT, GRAY, CYAN, scale_factor_y=scale_factor_y)
+    pause_quit_button = Button("RETURN TO MAIN MENU", VIRTUAL_WIDTH // 2 - BUTTON_WIDTH // 2, PAUSE_START_Y + BUTTON_HEIGHT + SPACING, BUTTON_WIDTH, BUTTON_HEIGHT, GRAY, CYAN, scale_factor_y=scale_factor_y)
     pause_music_checkbox = Checkbox("MUSIC", VIRTUAL_WIDTH // 2 - BUTTON_WIDTH // 2, PAUSE_START_Y + (2 * BUTTON_HEIGHT) + (2 * SPACING), scale_factor_y)
     pause_movement_button = CyclingButton("Movement", VIRTUAL_WIDTH // 2 - BUTTON_WIDTH // 2, PAUSE_START_Y + (2 * BUTTON_HEIGHT) + CHECKBOX_HEIGHT + (3 * SPACING), BUTTON_WIDTH, BUTTON_HEIGHT, GRAY, CYAN, [2, 3], "movement_speed", scale_factor_y)
     pause_movement_button.current_index = [2, 3].index(config["movement_speed"])
@@ -268,7 +268,12 @@ async def main():
                     if pause_resume_button.is_clicked(pos, scale_factor_x, scale_factor_y):
                         game_state[0] = GAME_PLAYING
                     if pause_quit_button.is_clicked(pos, scale_factor_x, scale_factor_y):
-                        running = False
+                        # 修改为返回主菜单而不是退出游戏
+                        game_state[0] = LANDING
+                        # 停止游戏音乐
+                        pygame.mixer.music.stop()
+                        # 播放点击音效
+                        sound_effects["click"].play()
                     if pause_music_checkbox.toggle(pos, scale_factor_x, scale_factor_y):
                         play_bgm = pause_music_checkbox.checked
                         if not play_bgm:
