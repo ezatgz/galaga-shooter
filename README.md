@@ -37,6 +37,58 @@ python galaga.py
 python run.py
 ```
 
+## 🌐 Web模式运行
+
+游戏支持在浏览器中运行，通过Pyodide实现。要部署到Web上，需要以下步骤：
+
+### 方法一：使用Pyodide（推荐）
+
+1. 创建一个HTML文件，包含Pyodide运行时：
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Starship Commander</title>
+</head>
+<body>
+    <script type="text/javascript">
+        async function main(){
+            let pyodide = await loadPyodide();
+            await pyodide.loadPackage("micropip");
+            const micropip = pyodide.pyimport("micropip");
+            await micropip.install("pygame");
+            
+            // 加载游戏代码
+            pyodide.runPython(`
+                # 你的游戏代码
+            `);
+        }
+        main();
+    </script>
+</body>
+</html>
+```
+
+2. 由于Pygame在Pyodide中有一些限制，需要使用特定的Pygame Web分发版本。
+
+### 方法二：使用Emscripten编译
+
+1. 安装Emscripten SDK
+2. 使用Emscripten编译Python代码为WebAssembly
+3. 部署生成的文件到Web服务器
+
+### 方法三：使用专门的Pygame-to-Web工具
+
+目前有一些实验性工具可以将Pygame游戏转换为Web版本：
+- pygbag: 专门为将Pygame游戏转换为Web应用而设计
+- pygame-web: 为Web优化的Pygame版本
+
+使用pygbag的示例：
+```bash
+pip install pygbag
+python -m pygbag --ume_block=0 your_main_file.py
+```
+
 ## 🎮 游戏操作
 
 ### 基本操作
@@ -88,7 +140,7 @@ python run.py
 - ⚙️ 射击速度设置
 - ⚙️ 子弹速度设置
 - 🔊 音乐开关状态
--  leaderboard记录
+- 🏆 高分榜记录
 
 ## 📁 项目结构
 
