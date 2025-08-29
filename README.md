@@ -25,14 +25,7 @@ pip install pygame
 
 ## ▶️ 运行游戏
 
-有两种方式可以运行游戏：
-
-1. 直接运行galaga.py:
-```bash
-python galaga.py
-```
-
-2. 通过run.py运行（支持异步模式）:
+通过run.py运行（支持异步模式）:
 ```bash
 python run.py
 ```
@@ -158,17 +151,12 @@ Galaga/
 │   ├── ui.py         # 用户界面组件
 │   ├── config.py     # 配置管理
 │   └── constants.py  # 常量定义
-├── galaga.py         # 同步版本主程序
 ├── run.py            # 运行入口
 └── README.md         # 说明文档
 ```
 
 ## 🛠️ 开发说明
 
-### 两种运行模式
-
-1. **galaga.py**: 使用传统的同步Pygame事件循环
-2. **run.py**: 使用异步事件循环，支持更多平台
 
 ### 性能优化
 
