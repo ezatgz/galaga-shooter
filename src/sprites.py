@@ -57,20 +57,12 @@ class BossExplosion(pygame.sprite.Sprite):
         self.frames = []
         frame_width = 256
         frame_height = 256
-        try:
-            # 尝试加载Boss爆炸效果图片
-            explosion_sheet = pygame.image.load(ASSET_PATHS["boss_explosion_sheet"]).convert_alpha()
-            for i in range(8):
-                frame = explosion_sheet.subsurface((i * frame_width, 0, frame_width, frame_height))
-                frame = pygame.transform.scale(frame, (int(frame_width * scale_factor_x), int(frame_height * scale_factor_y)))
-                self.frames.append(frame)
-        #except:
-            # 如果Boss爆炸效果图片不存在或加载失败，则使用普通爆炸效果图片
-        #    explosion_sheet = pygame.image.load(ASSET_PATHS["explosion_sheet"]).convert_alpha()
-        #    for i in range(6):
-        #        frame = explosion_sheet.subsurface((i * frame_width, 0, frame_width, frame_height))
-        #        frame = pygame.transform.scale(frame, (int(frame_width * scale_factor_x), int(frame_height * scale_factor_y)))
-        #        self.frames.append(frame)
+        # 加载Boss爆炸效果图片
+        explosion_sheet = pygame.image.load(ASSET_PATHS["boss_explosion_sheet"]).convert_alpha()
+        for i in range(8):
+            frame = explosion_sheet.subsurface((i * frame_width, 0, frame_width, frame_height))
+            frame = pygame.transform.scale(frame, (int(frame_width * scale_factor_x), int(frame_height * scale_factor_y)))
+            self.frames.append(frame)
         
         self.image = self.frames[0]
         self.rect = self.image.get_rect()
