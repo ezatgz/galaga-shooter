@@ -206,6 +206,9 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
+        # 保存原始位置，用于编队移动
+        self.original_pos = (x, y)
+
         if self.is_boss:
             self.health = int(3 * difficulty_modifier)
             self.shoot_timer = int(180 / difficulty_modifier)
@@ -232,7 +235,6 @@ class Enemy(pygame.sprite.Sprite):
         base_dive_speed = 3 if enemy_type != "fast" else 5
         self.dive_speed = base_dive_speed * difficulty_modifier
         self.return_speed = 6
-        self.original_pos = (x, y)
         self.dive_timer = 0
         self.sway_offset = random.uniform(0, 2 * math.pi)
         self.difficulty_modifier = difficulty_modifier
@@ -249,6 +251,8 @@ class Enemy(pygame.sprite.Sprite):
     def update(self, player_pos, group_dx):
         self.sway_offset += self.sway_speed
         sway_delta = math.sin(self.sway_offset) * self.sway_amplitude
+        
+        # 使用原始位置和组偏移来确定敌人的基本X位置
         base_x = self.original_pos[0] + group_dx
 
         if not self.is_diving and not self.is_returning and self.can_dive:
@@ -278,6 +282,13 @@ class Enemy(pygame.sprite.Sprite):
                 self.rect.x = target_x
                 self.rect.y = target_y
                 self.is_returning = False
+
+        # 对于非俯冲状态的敌人，更新其位置
+        if not self.is_diving and not self.is_returning:
+            self.rect.x = base_x + sway_delta
+            # 确保敌人不会移出屏幕边界
+            self.rect.x = max(0, min(VIRTUAL_WIDTH - self.rect.width, self.rect.x))
+            self.rect.y = self.original_pos[1]
 
         self.shoot()
         self.bullets.update()

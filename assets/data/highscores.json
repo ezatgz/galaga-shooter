@@ -1,5 +1,9 @@
 [
     {
+        "name": "eric",
+        "score": 44300
+    },
+    {
         "name": "zym",
         "score": 42750
     },
@@ -14,9 +18,5 @@
     {
         "name": "ez",
         "score": 27100
-    },
-    {
-        "name": "zym",
-        "score": 14700
     }
 ]

@@ -27,13 +27,15 @@ class Level:
             self.group_dx = random.choice([-2, 2, 0]) * self.difficulty_modifier
             self.move_timer = random.randint(30, 60)
 
-        leftmost_x = min([enemy.rect.left for enemy in self.enemies], default=0)
-        rightmost_x = max([enemy.rect.right for enemy in self.enemies], default=VIRTUAL_WIDTH)
+        # 检查敌人组是否接近屏幕边缘并调整移动方向
+        leftmost_x = min([enemy.original_pos[0] + self.group_x_offset for enemy in self.enemies], default=0)
+        rightmost_x = max([enemy.original_pos[0] + self.group_x_offset for enemy in self.enemies], default=VIRTUAL_WIDTH)
         
-        if leftmost_x + self.group_dx < 0:
-            self.group_dx = abs(self.group_dx)
-        elif rightmost_x + self.group_dx > VIRTUAL_WIDTH:
-            self.group_dx = -abs(self.group_dx)
+        # 确保敌人不会移出屏幕边缘
+        if leftmost_x < 0:
+            self.group_dx = abs(self.group_dx)  # 向右移动
+        elif rightmost_x > VIRTUAL_WIDTH:
+            self.group_dx = -abs(self.group_dx)  # 向左移动
 
         self.group_x_offset += self.group_dx
 
@@ -55,6 +57,15 @@ class Level:
         def get_enemy_type():
             return random.choices(enemy_types, weights=type_weights, k=1)[0]
 
+        # 加载一个敌人图像来获取尺寸
+        enemy_image = pygame.image.load(ASSET_PATHS["enemy_image"]).convert_alpha()
+        enemy_width = int(enemy_image.get_width() * self.scale_factor_x)
+        enemy_height = int(enemy_image.get_height() * self.scale_factor_y)
+        
+        # 调整中心位置，确保敌人不会生成在屏幕外
+        center_x = max(enemy_width // 2, min(VIRTUAL_WIDTH - enemy_width // 2, center_x))
+        center_y = max(enemy_height // 2, min(VIRTUAL_HEIGHT // 2, center_y))
+
         if formation_type == "rectangle":
             rows = min(5, (num_enemies + 4) // 5)
             cols = min(7, (num_enemies + rows - 1) // rows)
@@ -62,6 +73,9 @@ class Level:
                 for col in range(min(cols, num_enemies - row * cols)):
                     x = center_x - (cols * spacing) // 2 + col * spacing
                     y = center_y - (rows * spacing) // 2 + row * spacing
+                    # 确保敌人在屏幕范围内
+                    x = max(enemy_width // 2, min(VIRTUAL_WIDTH - enemy_width // 2, x))
+                    y = max(enemy_height // 2, min(VIRTUAL_HEIGHT - enemy_height // 2, y))
                     enemy_type = get_enemy_type()
                     self.enemies.add(Enemy(x, y, enemy_type, self.difficulty_modifier, self.scale_factor_x, self.scale_factor_y))
 
@@ -75,6 +89,9 @@ class Level:
                 for col in range(enemies_in_row):
                     x = center_x - (row * spacing) // 2 + col * spacing
                     y = center_y + row * spacing
+                    # 确保敌人在屏幕范围内
+                    x = max(enemy_width // 2, min(VIRTUAL_WIDTH - enemy_width // 2, x))
+                    y = max(enemy_height // 2, min(VIRTUAL_HEIGHT - enemy_height // 2, y))
                     enemy_type = get_enemy_type()
                     self.enemies.add(Enemy(x, y, enemy_type, self.difficulty_modifier, self.scale_factor_x, self.scale_factor_y))
                 enemy_count += enemies_in_row
@@ -92,6 +109,9 @@ class Level:
                 for col in range(enemies_in_row):
                     x = center_x - ((enemies_in_row - 1) * spacing) // 2 + col * spacing
                     y = center_y - (mid_row * spacing) + row * spacing
+                    # 确保敌人在屏幕范围内
+                    x = max(enemy_width // 2, min(VIRTUAL_WIDTH - enemy_width // 2, x))
+                    y = max(enemy_height // 2, min(VIRTUAL_HEIGHT - enemy_height // 2, y))
                     enemy_type = get_enemy_type()
                     self.enemies.add(Enemy(x, y, enemy_type, self.difficulty_modifier, self.scale_factor_x, self.scale_factor_y))
                 enemy_count += enemies_in_row
@@ -108,6 +128,9 @@ class Level:
                 for col in range(enemies_in_row):
                     x = center_x + (row * spacing if col == 0 else -row * spacing)
                     y = center_y + row * spacing
+                    # 确保敌人在屏幕范围内
+                    x = max(enemy_width // 2, min(VIRTUAL_WIDTH - enemy_width // 2, x))
+                    y = max(enemy_height // 2, min(VIRTUAL_HEIGHT - enemy_height // 2, y))
                     enemy_type = get_enemy_type()
                     self.enemies.add(Enemy(x, y, enemy_type, self.difficulty_modifier, self.scale_factor_x, self.scale_factor_y))
                 enemy_count += enemies_in_row
@@ -121,6 +144,9 @@ class Level:
                 angle = 2 * math.pi * i / max_enemies
                 x = center_x + radius * math.cos(angle)
                 y = center_y + radius * math.sin(angle)
+                # 确保敌人在屏幕范围内
+                x = max(enemy_width // 2, min(VIRTUAL_WIDTH - enemy_width // 2, x))
+                y = max(enemy_height // 2, min(VIRTUAL_HEIGHT - enemy_height // 2, y))
                 enemy_type = get_enemy_type()
                 self.enemies.add(Enemy(x, y, enemy_type, self.difficulty_modifier, self.scale_factor_x, self.scale_factor_y))
 
