@@ -184,6 +184,7 @@ class Level:
         elif self.wave == self.max_waves and self.boss_defeated:
             self.level += 1
             self.wave = 0
+            self.boss_defeated = False  # 重置Boss击败标记，确保下一关能生成Boss
             game_state[0] = LEVEL_UP
         return game_state
 

@@ -159,6 +159,7 @@ async def main():
         difficulty_mode = difficulty
         player = Player(config, scale_factor_x, scale_factor_y)
         player.level = Level(scale_factor_x, scale_factor_y)
+        player.level.calculate_difficulty(difficulty_mode)  # 添加这行来应用难度设置
         score = Score(player, scale_factor_x, scale_factor_y)
         explosions = pygame.sprite.Group()
         background_y = 0
@@ -422,6 +423,25 @@ async def main():
                             sound_effects["game_over"].play()
                             game_state[0] = NAME_INPUT
 
+            # 添加玩家与敌人碰撞检测
+            for enemy in player.level.enemies:
+                if pygame.sprite.collide_rect(player, enemy) and not player.shield_active:
+                    # 玩家受到伤害
+                    player.lives -= 1
+                    # 敌人被摧毁
+                    enemies_to_remove.append(enemy)
+                    sound_effects["lost_life"].play()
+                    explosions.add(Explosion(player.rect.centerx, player.rect.centery, scale_factor_x, scale_factor_y))
+                    explosions.add(Explosion(enemy.rect.centerx, enemy.rect.centery, scale_factor_x, scale_factor_y))
+                    # 如果敌人是Boss，标记Boss被击败
+                    if enemy.is_boss:
+                        player.level.boss_defeated = True
+                    # 检查玩家是否还有生命
+                    if player.lives <= 0:
+                        pygame.mixer.music.stop()
+                        sound_effects["game_over"].play()
+                        game_state[0] = NAME_INPUT
+
             for enemy in enemies_to_remove:
                 enemy.kill()
 
@@ -506,6 +526,7 @@ async def main():
                 level_up_timer = 0
                 if play_bgm:
                     pygame.mixer.music.unpause()
+                player.level.calculate_difficulty(difficulty_mode)  # 添加这行来应用难度设置
                 player.level.spawn_wave()
                 game_state[0] = GAME_PLAYING
 
