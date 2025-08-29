@@ -1,7 +1,7 @@
 import pygame
 import platform
 import asyncio
-from .sprites import Player, Explosion
+from .sprites import Player, Explosion, BossExplosion
 from .level import Level
 from .score import Score
 from .ui import Button, Checkbox, CyclingButton
@@ -407,11 +407,19 @@ async def main():
                             points = 50 if not enemy.is_boss else 500
                             score.add_points(points)
                             sound_effects["explosion"].play()
-                            explosions.add(Explosion(enemy.rect.centerx, enemy.rect.centery, scale_factor_x, scale_factor_y))
+                            # 使用Boss专用爆炸效果（仅在被彻底击败时）
+                            if enemy.is_boss:
+                                explosions.add(BossExplosion(enemy.rect.centerx, enemy.rect.centery, scale_factor_x, scale_factor_y))
+                            else:
+                                explosions.add(Explosion(enemy.rect.centerx, enemy.rect.centery, scale_factor_x, scale_factor_y))
                             player.level.spawn_power_up(enemy.rect.centerx, enemy.rect.centery)
                             if enemy.is_boss:
                                 player.level.boss_defeated = True
-
+                        # 添加这行代码，让Boss在每次被击中时显示普通敌人爆炸效果
+                        elif enemy.is_boss:
+                            # 为Boss被击中时添加普通敌人爆炸效果和声音效果
+                            sound_effects["explosion"].play()
+                            explosions.add(Explosion(enemy.rect.centerx, enemy.rect.centery, scale_factor_x, scale_factor_y))
                 for bullet in enemy.bullets:
                     if pygame.sprite.collide_rect(bullet, player) and not player.shield_active:
                         player.lives -= 1
@@ -449,7 +457,17 @@ async def main():
             for power_up in power_up_collisions:
                 player.collect_power_up(power_up.power_type, score)
 
-            if not player.level.enemies:
+            # 检查是否需要等待Boss爆炸效果播放完毕
+            boss_explosion_playing = False
+            if player.level.boss_defeated and not player.level.enemies:
+                # 检查是否还有Boss爆炸效果在播放
+                for explosion in explosions:
+                    if isinstance(explosion, BossExplosion):
+                        boss_explosion_playing = True
+                        break
+
+            # 只有在没有Boss爆炸效果播放时才进入下一波
+            if not boss_explosion_playing and not player.level.enemies:
                 game_state = player.level.next_wave(game_state, score, sound_effects["bonus"])
 
             background_y += SCROLL_SPEED

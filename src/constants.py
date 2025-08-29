@@ -50,6 +50,7 @@ ASSET_PATHS = {
     "enemy_bullet_image": "assets/images/sprites/enemy_bullet.png",
     "boss_image": "assets/images/sprites/boss.png",
     "explosion_sheet": "assets/images/sprites/explosion.png",
+    "boss_explosion_sheet": "assets/images/sprites/explosion_boss.png",  # 添加Boss爆炸效果资源路径
     "background_image": "assets/images/backgrounds/background.png",
     "heart_full": "assets/images/ui/heart_full.png",
     "heart_empty": "assets/images/ui/heart_empty.png",

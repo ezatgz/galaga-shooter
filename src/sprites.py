@@ -51,6 +51,44 @@ class Explosion(pygame.sprite.Sprite):
             else:
                 self.image = self.frames[self.frame_index]
 
+class BossExplosion(pygame.sprite.Sprite):
+    def __init__(self, x, y, scale_factor_x, scale_factor_y):
+        super().__init__()
+        self.frames = []
+        frame_width = 256
+        frame_height = 256
+        try:
+            # 尝试加载Boss爆炸效果图片
+            explosion_sheet = pygame.image.load(ASSET_PATHS["boss_explosion_sheet"]).convert_alpha()
+            for i in range(8):
+                frame = explosion_sheet.subsurface((i * frame_width, 0, frame_width, frame_height))
+                frame = pygame.transform.scale(frame, (int(frame_width * scale_factor_x), int(frame_height * scale_factor_y)))
+                self.frames.append(frame)
+        #except:
+            # 如果Boss爆炸效果图片不存在或加载失败，则使用普通爆炸效果图片
+        #    explosion_sheet = pygame.image.load(ASSET_PATHS["explosion_sheet"]).convert_alpha()
+        #    for i in range(6):
+        #        frame = explosion_sheet.subsurface((i * frame_width, 0, frame_width, frame_height))
+        #        frame = pygame.transform.scale(frame, (int(frame_width * scale_factor_x), int(frame_height * scale_factor_y)))
+        #        self.frames.append(frame)
+        
+        self.image = self.frames[0]
+        self.rect = self.image.get_rect()
+        self.rect.center = (x, y)
+        self.frame_index = 0
+        self.frame_rate = 5
+        self.frame_counter = 0
+
+    def update(self):
+        self.frame_counter += 1
+        if self.frame_counter >= self.frame_rate:
+            self.frame_counter = 0
+            self.frame_index += 1
+            if self.frame_index >= len(self.frames):
+                self.kill()
+            else:
+                self.image = self.frames[self.frame_index]
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, config, scale_factor_x, scale_factor_y):
         super().__init__()
