@@ -1,7 +1,8 @@
 # 🚀 Starship Commander (星际指挥官)
 
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/ezatgz/galaga-shooter)](https://github.com/ezatgz/galaga-shooter/releases)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/ezatgz/galaga-shooter)](https://github.com/ezatgz/galaga-shooter/releases/latest)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
 
 一个基于Pygame的太空射击游戏，灵感来源于经典游戏Galaga。
 
