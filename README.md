@@ -1,6 +1,6 @@
 # 🚀 Starship Commander (星际指挥官)
 
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/ezatgz/galaga-shooter)](https://github.com/ezatgz/galaga-shooter/releases/latest)
+[![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/ezatgz/galaga-shooter)](https://github.com/ezatgz/galaga-shooter/releases/latest)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 
