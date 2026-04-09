@@ -1,6 +1,17 @@
 # 🚀 Starship Commander (星际指挥官)
 
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
 一个基于Pygame的太空射击游戏，灵感来源于经典游戏Galaga。
+
+## 🖼️ 游戏截图
+
+| 主菜单 | 游戏画面 |
+| :---: | :---: |
+| ![主菜单](screenshot/main.jpg) | ![游戏画面](screenshot/gameplay.jpg) |
+| **暂停界面** | **游戏结束** |
+| ![暂停界面](screenshot/gamepause.jpg) | ![游戏结束](screenshot/gameover.jpg) |
+
 
 ## 🌟 游戏特色
 
@@ -29,6 +40,22 @@ pip install pygame
 ```bash
 python run.py
 ```
+
+## 🔨 构建执行文件 (EXE)
+
+如果你想将游戏打包为独立运行的 Windows EXE 文件，请按照以下步骤操作：
+
+1. 安装 PyInstaller:
+   ```bash
+   pip install pyinstaller
+   ```
+
+2. 运行打包命令:
+   ```bash
+   pyinstaller --onefile --windowed --name "GalagaShooter" --add-data "assets;assets" run.py
+   ```
+
+3. 打包完成后，你可以在 `dist/` 目录下找到生成的 `GalagaShooter.exe`。
 
 ## 🌐 Web模式运行
 
@@ -166,7 +193,7 @@ Galaga/
 
 ## 📄 许可证
 
-本项目仅供学习和娱乐使用。
+本项目采用 [GNU General Public License v3.0](LICENSE) 协议授权。
 
 ## 📝 更新日志
 
